@@ -1,6 +1,6 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 
-import { DesenvolvedorService } from '../dev/dev.service';
+import { DesenvolvedorService } from '../../dev/dev.service';
 
 @Controller('/devs')
 export class DevController {
