@@ -10,4 +10,8 @@ export class DesenvolvedorService {
     async findAll() {
         return this.desenvolvedorReposiroy.find();
     }
+
+    async findOne(id: string) {
+        return this.desenvolvedorReposiroy.findOne(id);
+    }
 }

@@ -19,6 +19,7 @@ export class EntityBase {
         type: 'timestamp',
         default: () => 'CURRENT_TIMESTAMP',
         precision: 0,
+        onUpdate: 'CURRENT_TIMESTAMP',
     })
     updatedAt: Date;
 }
