@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DesenvolvedorRepository } from './dev.repository';
 
 @Injectable()
@@ -12,6 +12,10 @@ export class DesenvolvedorService {
     }
 
     async findOne(id: string) {
-        return this.desenvolvedorReposiroy.findOne(id);
+        const dev = await this.desenvolvedorReposiroy.findOne(id);
+
+        if (!dev) throw new NotFoundException();
+
+        return dev;
     }
 }

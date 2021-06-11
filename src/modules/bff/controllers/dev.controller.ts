@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 
 import { DesenvolvedorService } from '../../dev/dev.service';
 
@@ -9,5 +9,10 @@ export class DevController {
     @Get()
     findAll() {
         return this.desenvolvedorService.findAll();
+    }
+
+    @Get(':ordem')
+    findOrderByDevId(@Query('id') id: string, @Param('ordem') order: string) {
+        return { id, order };
     }
 }

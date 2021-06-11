@@ -56,7 +56,7 @@ export class OrdemServicoService {
         return this.ordemServicoRepository.save(ordemServico);
     }
 
-    async findDetails(id: string) {
+    async findDetailsByDevId(id: string, devId: string) {
         const ordemServico = await this.ordemServicoRepository.findOne({
             relations: [
                 'admin',
@@ -66,14 +66,26 @@ export class OrdemServicoService {
                 'sistema',
                 'image',
             ],
-            where: { id },
+            where: { id, dev: { id: devId } },
         });
+
+        if (!ordemServico) {
+            throw new NotFoundException();
+        }
         return ordemServico;
     }
 
     async findOpen() {
         return this.ordemServicoRepository.find({
             status: 'ABERTO',
+        });
+    }
+
+    async findOrdersByDevId(devId: string) {
+        return this.ordemServicoRepository.find({
+            select: ['id', 'title', 'description'],
+            relations: ['dev'],
+            where: { dev: { id: devId }, status: 'EM ANDAMENTO' },
         });
     }
 }

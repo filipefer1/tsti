@@ -5,6 +5,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -58,8 +59,13 @@ export class OrdemServicoController {
     }
 
     @Get(':id')
-    async show(@Param('id') id: string) {
-        return this.ordemServicoService.findDetails(id);
+    async show(@Param('id') id: string, @Query('devId') devId: string) {
+        return this.ordemServicoService.findDetailsByDevId(id, devId);
+    }
+
+    @Get('dev/:devId')
+    async findOrdersByDevId(@Param('devId') devId: string) {
+        return this.ordemServicoService.findOrdersByDevId(devId);
     }
 
     @Patch(':id')
