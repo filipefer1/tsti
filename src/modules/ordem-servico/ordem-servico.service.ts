@@ -88,4 +88,8 @@ export class OrdemServicoService {
             where: { dev: { id: devId }, status: 'EM ANDAMENTO' },
         });
     }
+
+    async findOrdersByClientId(clientId: string) {
+        return this.ordemServicoRepository.findByClientId(clientId);
+    }
 }

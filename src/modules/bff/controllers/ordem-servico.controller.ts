@@ -49,8 +49,15 @@ export class OrdemServicoController {
         @UploadedFile() file: Express.Multer.File,
         @Body(ValidationPipe) dto: CreateOrdemServico,
     ) {
-        const image = await this.imageService.create(file);
-        return this.ordemServicoService.create({ ...dto, imageId: image.id });
+        let imageId;
+        if (file) {
+            const image = await this.imageService.create(file);
+            imageId = image.id;
+        }
+        return this.ordemServicoService.create({
+            ...dto,
+            imageId,
+        });
     }
 
     @Get()
@@ -66,6 +73,11 @@ export class OrdemServicoController {
     @Get('dev/:devId')
     async findOrdersByDevId(@Param('devId') devId: string) {
         return this.ordemServicoService.findOrdersByDevId(devId);
+    }
+
+    @Get('client/:clientId')
+    async findOrdersByClientId(@Param('clientId') clientId: string) {
+        return this.ordemServicoService.findOrdersByClientId(clientId);
     }
 
     @Patch(':id')

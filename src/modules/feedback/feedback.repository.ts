@@ -11,16 +11,6 @@ export class FeedbackRepository extends BaseRepository<Feedback> {
             .leftJoinAndSelect('Feedback.client', 'Client')
             .where('Feedback.ordemId = :orderId', { orderId });
 
-        if (dto.devId) {
-            feedbacks.orWhere('Feedback.devId = :devId', { devId: dto.devId });
-        }
-
-        if (dto.clientId) {
-            feedbacks.orWhere('Feedback.clientId = :clientId', {
-                clientId: dto.clientId,
-            });
-        }
-
         return feedbacks.orderBy('Feedback.createdAt', 'ASC').getMany();
     }
 }
