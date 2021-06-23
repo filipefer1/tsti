@@ -56,6 +56,24 @@ export class OrdemServicoService {
         return this.ordemServicoRepository.save(ordemServico);
     }
 
+    async findDetailsByClientId(id: string, clientId: string) {
+        const ordemServico = await this.ordemServicoRepository.findOne({
+            relations: [
+                'admin',
+                'dev',
+                'cliente',
+                'categoria',
+                'sistema',
+                'image',
+            ],
+            where: { id, cliente: { id: clientId } },
+        });
+
+        if (!ordemServico) {
+            throw new NotFoundException();
+        }
+        return ordemServico;
+    }
     async findDetailsByDevId(id: string, devId: string) {
         const ordemServico = await this.ordemServicoRepository.findOne({
             relations: [
@@ -76,20 +94,53 @@ export class OrdemServicoService {
     }
 
     async findOpen() {
-        return this.ordemServicoRepository.find({
-            status: 'ABERTO',
-        });
+        return this.ordemServicoRepository.findOpen();
     }
 
     async findOrdersByDevId(devId: string) {
         return this.ordemServicoRepository.find({
-            select: ['id', 'title', 'description'],
-            relations: ['dev'],
+            select: ['id', 'title', 'description', 'createdAt'],
+            relations: ['dev', 'categoria', 'sistema', 'cliente'],
             where: { dev: { id: devId }, status: 'EM ANDAMENTO' },
         });
     }
 
     async findOrdersByClientId(clientId: string) {
         return this.ordemServicoRepository.findByClientId(clientId);
+    }
+
+    async findOrderDetails(orderId: string) {
+        const ordemServico = await this.ordemServicoRepository.findOne({
+            relations: [
+                'admin',
+                'dev',
+                'cliente',
+                'categoria',
+                'sistema',
+                'image',
+            ],
+            where: { id: orderId },
+        });
+
+        if (!ordemServico) {
+            throw new NotFoundException('n tem ordem');
+        }
+
+        return ordemServico;
+    }
+
+    async finishOrder(orderId: string) {
+        const order = await this.ordemServicoRepository.findOne(orderId, {
+            where: { status: 'EM ANDAMENTO' },
+        });
+
+        if (!order) {
+            throw new NotFoundException('Não tem');
+        }
+
+        order.status = 'FINALIZADO';
+        order.finishedAt = new Date();
+
+        return this.ordemServicoRepository.save(order);
     }
 }

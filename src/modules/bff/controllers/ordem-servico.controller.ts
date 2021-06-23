@@ -80,11 +80,21 @@ export class OrdemServicoController {
         return this.ordemServicoService.findOrdersByClientId(clientId);
     }
 
+    @Get('client/:orderId/details')
+    async findOrdersDetailsByClientId(@Param('orderId') orderId: string) {
+        return this.ordemServicoService.findOrderDetails(orderId);
+    }
+
     @Patch(':id')
     async update(
         @Param('id') id: string,
         @Body(ValidationPipe) dto: UpdateOrdemServico,
     ) {
         return this.ordemServicoService.update(id, dto);
+    }
+
+    @Patch('finish/:id')
+    async finishOrder(@Param('id') id: string) {
+        return this.ordemServicoService.finishOrder(id);
     }
 }
