@@ -90,6 +90,10 @@ export class OrdemServicoService {
         if (!ordemServico) {
             throw new NotFoundException();
         }
+
+        if (ordemServico.image) {
+            ordemServico.image.destination = `http://localhost:3000/${ordemServico.image.destination}`;
+        }
         return ordemServico;
     }
 
@@ -124,6 +128,9 @@ export class OrdemServicoService {
 
         if (!ordemServico) {
             throw new NotFoundException('n tem ordem');
+        }
+        if (ordemServico.image) {
+            ordemServico.image.destination = `http://localhost:3000/${ordemServico.image.destination}`;
         }
 
         return ordemServico;
